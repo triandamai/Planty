@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.pager.*
+import com.qamar.planty.data.model.Plant
 import com.qamar.planty.ui.theme.Gray
 import com.qamar.planty.ui.theme.PlantyTheme
 import com.qamar.planty.ui.theme.textFont
@@ -23,55 +24,56 @@ import com.qamar.planty.ui.theme.textFont
 @Composable
 fun CategoryTabs() {
     val pagerState = rememberPagerState()
-    val pages = listOf("kotlin", "java", "c#", "php", "golang", "rust")
+    val pages = Plant().getPlantList()
     val indicator = @Composable { tabPositions: List<TabPosition> ->
         CustomIndicator(tabPositions, pagerState)
     }
 
-    ScrollableTabRow(
-        modifier = Modifier
-            .padding(top = 33.dp, start = 37.dp)
-            .height(30.dp),
-        selectedTabIndex = pagerState.currentPage,
-        indicator = indicator,
-        backgroundColor = Color.White,
-        edgePadding = 0.dp,
-        divider = {
-            Divider(color = Color.Transparent)
+    Column(Modifier.fillMaxSize()
+        .background(Color.White)) {
+        ScrollableTabRow(
+            modifier = Modifier
+                .padding(top = 33.dp, start = 37.dp)
+                .height(30.dp),
+            selectedTabIndex = pagerState.currentPage,
+            indicator = indicator,
+            backgroundColor = Color.White,
+            edgePadding = 0.dp,
+            divider = {
+                Divider(color = Color.Transparent)
+            }
+        ) {
+            pages.forEachIndexed { index, title ->
+                val isSelected = pagerState.currentPage == index
+                val color: Color by animateColorAsState(
+                    if (isSelected) Color.White else Gray
+                )
+                Tab(
+                    modifier = Modifier.zIndex(6f),
+                    text = {
+                        Text(
+                            text = title, color = color,
+                            style = textFont
+                        )
+                    },
+                    selected = isSelected,
+                    onClick = { /* TODO */ },
+                )
+            }
         }
-    ) {
-        pages.forEachIndexed { index, title ->
-            val isSelected = pagerState.currentPage == index
-            val color: Color by animateColorAsState(
-                if (isSelected) Color.White else Gray
-            )
-            Tab(
-                modifier = Modifier.zIndex(6f),
-                text = {
-                    Text(
-                        text = title, color = color,
-                        style = textFont
-                    )
-                },
-                selected = isSelected,
-                onClick = { /* TODO */ },
-            )
+
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            count = pages.size,
+            state = pagerState,
+        ) { page ->
+            Box(Modifier.fillMaxSize()) {
+                Text(modifier = Modifier.align(Alignment.Center), text = "Page $page")
+            }
         }
     }
-
-    HorizontalPager(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        count = pages.size,
-        state = pagerState,
-    ) { page ->
-        Box(Modifier.fillMaxSize()) {
-            Text(modifier = Modifier.align(Alignment.Center), text = "Page $page")
-        }
-    }
-
-
 }
 
 @Preview
