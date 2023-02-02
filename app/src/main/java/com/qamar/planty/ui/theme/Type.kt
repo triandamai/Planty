@@ -32,3 +32,18 @@ val titleFont = TextStyle(
     lineHeight = 24.sp,
     letterSpacing = 0.5.sp
 )
+val titleFont20 = TextStyle(
+    fontFamily = logoFont,
+    fontWeight = FontWeight.Normal,
+    fontSize = 20.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp
+)
+
+val percentFont = TextStyle(
+    fontFamily = fonts,
+    fontWeight = FontWeight.Normal,
+    fontSize = 30.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.5.sp
+)

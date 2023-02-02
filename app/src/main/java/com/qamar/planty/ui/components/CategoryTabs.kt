@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +34,11 @@ fun CategoryTabs() {
         CustomIndicator(tabPositions, pagerState)
     }
 
-    Column(Modifier.fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         ScrollableTabRow(
             modifier = Modifier
                 .padding(top = 33.dp, start = 37.dp)
@@ -43,7 +51,7 @@ fun CategoryTabs() {
                 Divider(color = Color.Transparent)
             }
         ) {
-            pages.forEachIndexed { index, title ->
+            pages.forEachIndexed { index, plant ->
                 val isSelected = pagerState.currentPage == index
                 val color: Color by animateColorAsState(
                     if (isSelected) Color.White else Gray
@@ -52,13 +60,24 @@ fun CategoryTabs() {
                     modifier = Modifier.zIndex(6f),
                     text = {
                         Text(
-                            text = title, color = color,
+                            text = plant.name ?: "", color = color,
                             style = textFont
                         )
                     },
                     selected = isSelected,
                     onClick = { /* TODO */ },
                 )
+            }
+        }
+
+        var currentItem by remember {
+            mutableStateOf(Plant())
+        }
+
+        LaunchedEffect(pagerState) {
+            // Collect from the pager state a snapshotFlow reading the currentPage
+            snapshotFlow { pagerState.currentPage }.collect { page ->
+                currentItem =  pages[page]
             }
         }
 
@@ -70,7 +89,17 @@ fun CategoryTabs() {
             state = pagerState,
         ) { page ->
             Box(Modifier.fillMaxSize()) {
-                Text(modifier = Modifier.align(Alignment.Center), text = "Page $page")
+                Column(
+                    Modifier
+                        .padding(end = 33.dp)
+                        .align(Alignment.CenterEnd)
+                        .wrapContentWidth(),
+                    verticalArrangement = Arrangement.spacedBy(19.dp)
+                ) {
+                    repeat(currentItem.properties.size){
+                        CircularProgress(currentItem.properties[it])
+                    }
+                }
             }
         }
     }
