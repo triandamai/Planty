@@ -1,5 +1,8 @@
 package com.qamar.planty.data.model
 
+import com.qamar.planty.R
+import kotlin.random.Random
+
 
 data class Plant(
     val name: String? = "",
@@ -9,18 +12,19 @@ data class Plant(
             Properties("Food"),
             Properties("Water"),
         ),
+    val image: Int? = null
 ) {
 
     fun getPlantList(): List<Plant> {
 
         //"Bird of paradise", "Dracaena", "Palm", "Ficus", "Cedar", "Fiddle"
         return listOf(
-            Plant("Bird of paradise"),
-            Plant("Dracaena"),
-            Plant("Palm"),
-            Plant("Ficus"),
-            Plant("Cedar"),
-            Plant("Fiddle"),
+            Plant("Bird of paradise",image = R.drawable.plant1),
+            Plant("Dracaena",image = R.drawable.plant2),
+            Plant("Palm",image = R.drawable.plant3),
+            Plant("Ficus",image = R.drawable.plant1),
+            Plant("Cedar",image = R.drawable.plant2),
+            Plant("Fiddle",image = R.drawable.plant3),
         )
     }
 }
